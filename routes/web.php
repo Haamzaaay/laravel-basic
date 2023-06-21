@@ -183,12 +183,16 @@ Route::get('test-transaction',function(){
 //   },function($e){
 //     return $e;
 //   },true);
-// try{
-    User::findOrFail(90);
+try{
+   $retult= DB::transaction(function () {
+        User::find(11)->update(['name'=>'faqeer']);
+        User::find(11)->updatesvs(['name'=>'faqeer']);
 
-// }catch(Exception $e){
-// report($e);
-// }
+    });
+
+}catch(Exception $e){
+dd($e);
+}
 
 });
 

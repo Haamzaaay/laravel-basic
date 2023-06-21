@@ -1,8 +1,7 @@
     <html>
 
     <head>
-        <style>
-        </style>
+
     </head>
 
     <body>
@@ -22,11 +21,11 @@
         </div>
 
     </body>
-    <script src="{{ resource_path('js/app.js') }}"></script>
+    {{-- <script src="{{ resource_path('js/app.js') }}"></script> --}}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script>
         $(async function() {
-            console.log('before calling')
+            console.log('before calling');
             try {
                 let result = await hello();
                 result.then((result) => {
