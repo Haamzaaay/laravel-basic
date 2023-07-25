@@ -1,7 +1,12 @@
 <?php
 
+use App\classes\ChildClass;
 use App\classes\Fascade\TestFascade;
+use App\classes\ParentClass;
+use App\classes\Sessionclass;
 use App\classes\TestClass;
+use App\Enum\ProductStatusEnum;
+use App\Enum\statusEnum;
 use App\Exceptions\CustomException;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestingController;
@@ -17,6 +22,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +35,41 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 |
 */
 
+Route::get('testing1',function(){
+    // resolve(ChildClass::class)->parenttest();
+    (new ChildClass())->main();
+})->name('testing');
+
+
+Route::get('test-code1',function(){
+    session(['testval' => 'value']);
+    dump(Session::get('testval'));
+    dump(Session()->getId());
+
+});
+Route::get('test-code2',function(){
+    dump(Session()->getId());
+
+    dump(Session::get('testval'));
+
+
+});
+
+Route::get('session-inside-constructor',[Sessionclass::class,'check'])->middleware('checktestmiddleware');
+
+Route::get('casts-test',function(){
+
+    Book::create([
+        'title'=>'new',
+        'description' => 'new description',
+        'json'=>(['id'=>'35','name'=>'khalil qamar ahmed sialvi naqshbandi']) ,  // now this array will be converted json while inserting else agr hm model main casting nah likhien tu hmien idr json_encode likhna parta h
+        'is_active'=> 1,
+    ]);
+
+   $book=Book::find(17);
+   dd($book->title);
+});
+
 Route::get('toQuery',function(){
  return   $user=User::all();
     $user->toQuery()->update([
@@ -36,7 +77,9 @@ Route::get('toQuery',function(){
     ]);
 });
 
-Route::get('test-trait',function(){
+Route::get('test-trait',function(Request $request){
+    dump($request->session()->get('test'));
+    return ;
     resolve(TestClass::class)->title();
 });
 
@@ -45,7 +88,8 @@ Route::get('test-gate',[TestingController::class,'index']);
 
 Route::get('cookies-test',function(Request $request){
 try{
-
+    $request->session()->put('test', 'hamza');
+    dump($request->session()->get('test'));
 
 }catch(Exception $e){
     dd($e);
@@ -54,7 +98,7 @@ try{
 Route::get('fascade-test', function (Request $request) {
     return    TestFascade::greet();
 });
-Route::get('/testing', [TestController::class, 'index']);
+Route::get('/testing', [TestController::class, 'index'])->name("testing");
 
 
 Route::get('var-check', function (Request $request) {

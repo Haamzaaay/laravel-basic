@@ -2,14 +2,24 @@
 
 namespace App\Models;
 
+use App\Casts\stringUpperCase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 
 class Book extends Model
 {
     use HasFactory;
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'is_active',
+        'json',
+    ];
+
+    protected $casts=[
+        'json'=> AsArrayObject::class,
+        'title'=>stringUpperCase::class,
+        'description'=>statusEnum::class,
     ];
 }

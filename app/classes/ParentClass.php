@@ -13,4 +13,10 @@ class ParentClass
     {
         echo "parent class method called ";
     }
+
+    public static function main(){
+
+        dd((new static()));
+        return (new static())->title();
+    }
 }
